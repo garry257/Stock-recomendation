@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockIQ - Recommendation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1 onclick="window.location.href='index.html'" style="cursor: pointer; display: inline-block;">StockIQ</h1>
+        <p id="stockName">--</p>
+    </header>
+
+    <main class="container">
+        <!-- HERO SECTION: The big answer first -->
+        <div class="hero-result">
+            <div class="hero-header">
+                <div class="stock-info">
+                    <h2 id="stockNameHero">--</h2>
+                    <p>Sector: <span id="sector">--</span> | Price: ₹<span id="price">--</span></p>
+                </div>
+                <div id="recommendationBadge" class="badge">--</div>
+            </div>
+            <div class="total-score-display">
+                Fundamental Health: <span id="totalScore">0</span>/100
+            </div>
+            <p id="ratingReason" class="rating-reason">--</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- LEFT: FUNDAMENTALS -->
+            <section class="analysis-section">
+                <h3><i class="icon">📊</i> Scoring Metrics</h3>
+                <div class="factors-compact-grid">
+                    <div class="factor-row">
+                        <div class="label-group">
+                            <span class="label">Sales Revenue Growth</span>
+                            <small class="label-desc">Growth in total business sales</small>
+                        </div>
+                        <span class="mini-score"><span id="revScore">0</span>/20</span>
+                    </div>
+                    <div class="factor-row">
+                        <div class="label-group">
+                            <span class="label">Net Profit Growth</span>
+                            <small class="label-desc">Growth in bottom-line earnings</small>
+                        </div>
+                        <span class="mini-score"><span id="profitScore">0</span>/20</span>
+                    </div>
+                    <div class="factor-row">
+                        <div class="label-group">
+                            <span class="label">Debt-to-Equity Ratio</span>
+                            <small class="label-desc">Company financial leverage/risk</small>
+                        </div>
+                        <span class="mini-score"><span id="debtScore">0</span>/20</span>
+                    </div>
+                    <div class="factor-row">
+                        <div class="label-group">
+                            <span class="label">Price-to-Earnings (P/E)</span>
+                            <small class="label-desc">Stock price relative to profit</small>
+                        </div>
+                        <span class="mini-score"><span id="peScore">0</span>/20</span>
+                    </div>
+                    <div class="factor-row">
+                        <div class="label-group">
+                            <span class="label">Return on Equity (ROE)</span>
+                            <small class="label-desc">Management efficiency & compounding</small>
+                        </div>
+                        <span class="mini-score"><span id="roeScore">0</span>/20</span>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 25px;"><i class="icon">🏢</i> Company Statistics</h3>
+                <div class="factors-compact-grid">
+                    <div class="factor-row">
+                        <div class="label-group">
+                            <span class="label">Market Capitalization (Cr)</span>
+                            <small class="label-desc">Total market value of the company</small>
+                        </div>
+                        <span class="value" id="marketCap">--</span>
+                    </div>
+                    <div class="factor-row">
+                        <div class="label-group">
+                            <span class="label">Dividend Yield (%)</span>
+                            <small class="label-desc">Annual cash payout to shareholders</small>
+                        </div>
+                        <span class="value" id="divYield">--</span>
+                    </div>
+                    <div class="factor-row">
+                        <div class="label-group">
+                            <span class="label">Book Value per Share</span>
+                            <small class="label-desc">Net asset value per single share</small>
+                        </div>
+                        <span class="value" id="bookValue">--</span>
+                    </div>
+                    <div class="factor-row">
+                        <div class="label-group">
+                            <span class="label">Face Value</span>
+                            <small class="label-desc">Original value of one share</small>
+                        </div>
+                        <span class="value" id="faceValue">--</span>
+                    </div>
+                    <div class="factor-row">
+                        <div class="label-group">
+                            <span class="label">SIP Suitability</span>
+                            <small class="label-desc">Score for long-term monthly investing</small>
+                        </div>
+                        <span class="value" id="sipSuitability" style="color: var(--green);">--</span>
+                    </div>
+                    <div id="sipExplanationContainer" style="display:none; margin-top: 10px; padding: 12px; background: rgba(0,200,83,0.05); border-left: 3px solid var(--green); border-radius: 4px;">
+                        <p id="sipExplanation" style="margin:0; font-size: 0.85rem; color: #ccc; line-height: 1.4;"></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT: TRADING -->
+            <section class="analysis-section">
+                <h3><i class="icon">📈</i> Trading Signals</h3>
+                <div class="timeframe-tabs">
+                    <button class="tab-btn active" onclick="switchTimeframe('Daily')">Daily</button>
+                    <button class="tab-btn" onclick="switchTimeframe('Weekly')">Weekly</button>
+                    <button class="tab-btn" onclick="switchTimeframe('Monthly')">Monthly</button>
+                    <button class="tab-btn" onclick="switchTimeframe('Yearly')">Yearly</button>
+                </div>
+                <div class="signal-card">
+                    <div id="signalBadge" class="badge small">HOLD</div>
+                    <div class="confidence-points">Confidence: <span id="signalPoints">0</span> / 10</div>
+                    <p id="signalDescription">Analyzing market trends...</p>
+                </div>
+
+                <!-- Technical Analysis Summary Widget -->
+                <div class="tradingview-widget-container" style="margin-top: 20px;">
+                    <div class="tradingview-widget-container__widget"></div>
+                    <div id="tradingview_ta_widget"></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- BOTTOM: CHART -->
+        <div class="chart-container full-width">
+            <h3>Interactive Technical Chart</h3>
+            <div id="tradingview_widget"></div>
+        </div>
+    </main>
+
+    <!-- TradingView Widget Script -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
+    <script src="script.js"></script>
+    <script>
+        // Run this when recommendation.html loads
+        window.onload = () => {
+            loadStockDetails();
+        };
+    </script>
+</body>
+</html>

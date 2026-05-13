@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockIQ - Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo-area">
+            <h1>StockIQ</h1>
+            <p>Institutional Grade Stock Analysis</p>
+        </div>
+        <div id="userNav" class="user-nav">
+            <a href="login.html" class="auth-btn-nav login">Login</a>
+            <a href="register.html" class="auth-btn-nav register">Register</a>
+        </div>
+    </header>
+    <main class="container">
+        <div class="search-box">
+            <h2>Find a Stock</h2>
+            <input type="text" id="searchInput" placeholder="Enter stock ticker (e.g. ZOMATO, RELIANCE, AAPL)">
+            <button onclick="searchStock()">Analyze</button>
+        </div>
+
+        <div class="trending">
+            <h3>Trending Stocks</h3>
+            <div class="stock-cards">
+                <div class="card" onclick="goToStock('ZOMATO')">ZOMATO</div>
+                <div class="card" onclick="goToStock('RELIANCE')">RELIANCE</div>
+                <div class="card" onclick="goToStock('TCS')">TCS</div>
+            </div>
+        </div>
+
+        <div class="history-section">
+            <div class="section-header-flex">
+                <h3>Your Recent Searches</h3>
+                <button onclick="clearAllHistory()" id="clearAllBtn" class="text-btn danger" style="display:none;">Clear All</button>
+            </div>
+            <div id="historyList" class="history-grid">
+                <!-- History items will load here -->
+            </div>
+        </div>
+
+        <!-- NEW: SIP Suitability Info Section -->
+        <div class="info-section">
+            <div class="info-card">
+                <h3><i class="icon">📈</i> What is SIP Suitability?</h3>
+                <p>Systematic Investment Plan (SIP) suitability helps you identify stocks that are ideal for long-term, disciplined investing. Not every stock is a candidate for monthly accumulation.</p>
+                
+                <div class="sip-criteria-grid">
+                    <div class="criteria-item">
+                        <span class="criteria-title">Consistent Growth</span>
+                        <p>We look for stocks with stable Revenue and Profit growth over multiple years.</p>
+                    </div>
+                    <div class="criteria-item">
+                        <span class="criteria-title">Low Debt</span>
+                        <p>Companies with minimal debt are more resilient during market downturns.</p>
+                    </div>
+                    <div class="criteria-item">
+                        <span class="criteria-title">High ROE</span>
+                        <p>A high Return on Equity indicates efficient management and compounding power.</p>
+                    </div>
+                </div>
+                
+                <div class="sip-footer">
+                    <p><strong>Note:</strong> "Excellent" suitability means the stock meets all fundamental criteria for wealth creation through long-term compounding.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
