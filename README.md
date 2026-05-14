@@ -20,19 +20,4 @@ This is a mini project for a Stock Recommendation System. It uses HTML, CSS, and
 *   The backend calculates the score and sends it back to the frontend.
 *   **Fallback Feature**: If the backend server is not running or fails, the frontend automatically falls back to *Mock Data* so your presentation won't crash!
 
-## How to Run It (For Your Presentation)
 
-### Step 1: Start the Database & Backend
-1.  Make sure you have **Node.js** and **MongoDB** installed on your computer. Make sure MongoDB is running.
-2.  Open your terminal or command prompt.
-3.  Navigate to the `backend` folder: `cd C:\Users\kadam\.gemini\antigravity\scratch\stockiq-mini\backend`
-4.  Install dependencies: `npm install`
-5.  Start the server: `npm start`
-    *   *You should see "MongoDB Database Connected Successfully!" and "Backend Server running on http://localhost:5000"*
-
-### Step 2: Open the Frontend
-1.  Open your File Explorer and navigate to `C:\Users\kadam\.gemini\antigravity\scratch\stockiq-mini\`.
-2.  Simply **Double-Click** on the `index.html` file to open it in your browser.
-3.  Type a stock like `RELIANCE` and click Analyze.
-4.  The frontend will fetch real data from your Node.js backend!
-5.  (Optional) Go to `http://localhost:5000/api/history` in your browser to see the database search history.
