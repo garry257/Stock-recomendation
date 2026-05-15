@@ -157,7 +157,7 @@ async function getStockData(ticker) {
         const sipExplanation = sipVal === "Excellent" ? "Strong growth, high efficiency, and low debt make this a perfect candidate for monthly accumulation." : (sipVal === "Good" ? "Decent fundamentals. Suitable for SIP with cautious monitoring." : "Weak compounding potential. Better for tactical trades than long-term SIP.");
 
         const companyStats = {
-            marketCap: marketCap !== "N/A" ? marketCap : "N/A",
+            marketCap: marketCap !== "N/A"   ? marketCap : "N/A",
             divYield: divYield !== "N/A" ? divYield : "N/A",
             bookValue: bookValue !== "N/A" ? bookValue : "N/A",
             faceValue: faceValue !== "N/A" ? faceValue : "N/A",

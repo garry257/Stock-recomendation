@@ -1,3 +1,8 @@
+// API Configuration
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:5001' 
+    : 'https://stock-recomendation.onrender.com';
+
 // Mock Data Database (Fallback if backend is offline)
 const mockStockData = {
     "RELIANCE": {
@@ -87,7 +92,7 @@ async function loadStockDetails() {
     document.getElementById("stockName").innerText = `${ticker}`;
 
     try {
-        const response = await fetch(`http://localhost:5001/api/stock/${ticker}?userId=${userId}`);
+        const response = await fetch(`${API_BASE_URL}/api/stock/${ticker}?userId=${userId}`);
         if (!response.ok) throw new Error("Stock not found");
         const data = await response.json();
         updateUI(ticker, data);
@@ -353,7 +358,7 @@ async function loadHistory() {
     const userId = localStorage.getItem("userId");
     
     try {
-        const response = await fetch(`http://localhost:5001/api/history?userId=${userId}`);
+        const response = await fetch(`${API_BASE_URL}/api/history?userId=${userId}`);
         const data = await response.json();
 
         historyList.innerHTML = "";
@@ -395,7 +400,7 @@ async function loadHistory() {
 async function deleteHistoryItem(id) {
     const userId = localStorage.getItem("userId");
     try {
-        await fetch(`http://localhost:5001/api/history/${id}?userId=${userId}`, { method: 'DELETE' });
+        await fetch(`${API_BASE_URL}/api/history/${id}?userId=${userId}`, { method: 'DELETE' });
         loadHistory(); // Refresh
     } catch (err) {
         alert("Failed to delete item");
@@ -406,7 +411,7 @@ async function clearAllHistory() {
     if (!confirm("Are you sure you want to clear all history?")) return;
     const userId = localStorage.getItem("userId");
     try {
-        await fetch(`http://localhost:5001/api/history/all?userId=${userId}`, { method: 'DELETE' });
+        await fetch(`${API_BASE_URL}/api/history/all?userId=${userId}`, { method: 'DELETE' });
         loadHistory(); // Refresh
     } catch (err) {
         alert("Failed to clear history");
