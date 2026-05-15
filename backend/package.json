@@ -4,7 +4,7 @@
   "description": "Backend for StockIQ using Node, Express, MongoDB and Yahoo Finance API",
   "main": "server.js",
   "scripts": {
-    "start": "node backend/server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
