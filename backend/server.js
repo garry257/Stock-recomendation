@@ -1,18 +1,27 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import cors from 'cors';
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const dns = require('dns');
+
+// Force use of Google DNS to resolve MongoDB SRV records
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 // DATABASE CONNECTION
+const mongoose = require('mongoose');
 
-const MONGO_URI = 'mongodb://127.0.0.1:27017/stockiq_mini';
-
-mongoose.connect(MONGO_URI)
-    .then(() => console.log("✅ MongoDB Connected!"))
-    .catch(err => console.error("❌ MongoDB Error:", err.message));
+mongoose.connect(process.env.MONGO_URL)
+.then(() => {
+    console.log("MongoDB Connected");
+})
+.catch((err) => {
+    console.log(err);
+});
 
 // 1. Schemas
 const UserSchema = new mongoose.Schema({
