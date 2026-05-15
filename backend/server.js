@@ -260,7 +260,7 @@ app.delete('/api/history/:id', async (req, res) => {
 });
 
 // ==========================================
-const PORT = 5001; // Using 5001 to avoid EADDRINUSE on 5000
+const PORT = process.env.PORT || 5001; 
 app.listen(PORT, () => {
     console.log(`🚀 Universal Stock Server running at http://localhost:${PORT}`);
     console.log(`📊 Works for both Indian (ZOMATO, RELIANCE) and US stocks!`);
