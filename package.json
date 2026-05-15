@@ -1,5 +1,11 @@
 {
+  "scripts": {
+    "start": "node backend/server.js",
+    "build": "cd backend && npm install"
+  },
   "dependencies": {
+    "dotenv": "^17.4.2",
+    "mongoose": "^9.6.2",
     "yahoo-finance2": "^2.0.0"
   }
 }
