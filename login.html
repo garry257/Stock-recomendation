@@ -31,20 +31,25 @@
             const username = document.getElementById("loginUser").value;
             const password = document.getElementById("loginPass").value;
 
-            const res = await fetch(`${API_BASE_URL}/api/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, password })
-            });
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
 
-            const data = await res.json();
-            if (data.success) {
-                localStorage.setItem("userId", data.userId);
-                localStorage.setItem("username", data.username);
-                alert("Login successful!");
-                window.location.href = "index.html";
-            } else {
-                alert(data.message);
+                const data = await res.json();
+                if (data.success) {
+                    localStorage.setItem("userId", data.userId);
+                    localStorage.setItem("username", data.username);
+                    alert("Login successful!");
+                    window.location.href = "index.html";
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                alert("Could not connect to the server. Please ensure the backend is running.");
+                console.error(error);
             }
         };
     </script>

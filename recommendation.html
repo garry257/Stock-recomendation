@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StockIQ - Recommendation</title>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Lightweight Charts for Custom Unrestricted Charting -->
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
 </head>
 <body>
     <header>
@@ -13,142 +16,239 @@
     </header>
 
     <main class="container">
-        <!-- HERO SECTION: The big answer first -->
-        <div class="hero-result">
-            <div class="hero-header">
-                <div class="stock-info">
-                    <h2 id="stockNameHero">--</h2>
-                    <p>Sector: <span id="sector">--</span> | Price: ₹<span id="price">--</span></p>
-                </div>
-                <div id="recommendationBadge" class="badge">--</div>
-            </div>
-            <div class="total-score-display">
-                Fundamental Health: <span id="totalScore">0</span>/100
-            </div>
-            <p id="ratingReason" class="rating-reason">--</p>
+        <!-- TABS -->
+        <div class="tabs-container" style="display: flex; background: rgba(0,0,0,0.3); padding: 6px; border-radius: 12px; margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.05);">
+            <button id="btnFund" onclick="switchTab('fundamental')" style="flex: 1; padding: 14px; font-size: 1.05rem; background: var(--accent); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(108, 99, 255, 0.4);">Fundamental Analysis (Long-Term)</button>
+            <button id="btnTech" onclick="switchTab('technical')" style="flex: 1; padding: 14px; font-size: 1.05rem; background: transparent; color: #888; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease;">Technical Analysis & Chart (Short-Term)</button>
         </div>
 
-        <div class="dashboard-grid">
-            <!-- LEFT: FUNDAMENTALS -->
-            <section class="analysis-section">
-                <h3><i class="icon">📊</i> Scoring Metrics</h3>
-                <div class="factors-compact-grid">
-                    <div class="factor-row">
-                        <div class="label-group">
-                            <span class="label">Sales Revenue Growth</span>
-                            <small class="label-desc">Growth in total business sales</small>
-                        </div>
-                        <span class="mini-score"><span id="revScore">0</span>/20</span>
+        <!-- ==================== FUNDAMENTAL VIEW ==================== -->
+        <div id="fundamentalView" style="display: block; animation: fadeIn 0.3s ease;">
+            <!-- HERO SECTION: The big answer first -->
+            <div class="hero-result">
+                <div class="hero-header">
+                    <div class="stock-info">
+                        <h2 id="stockNameHero">--</h2>
+                        <p>Sector: <span id="sector">--</span> | Price: ₹<span id="price">--</span></p>
                     </div>
-                    <div class="factor-row">
-                        <div class="label-group">
-                            <span class="label">Net Profit Growth</span>
-                            <small class="label-desc">Growth in bottom-line earnings</small>
-                        </div>
-                        <span class="mini-score"><span id="profitScore">0</span>/20</span>
-                    </div>
-                    <div class="factor-row">
-                        <div class="label-group">
-                            <span class="label">Debt-to-Equity Ratio</span>
-                            <small class="label-desc">Company financial leverage/risk</small>
-                        </div>
-                        <span class="mini-score"><span id="debtScore">0</span>/20</span>
-                    </div>
-                    <div class="factor-row">
-                        <div class="label-group">
-                            <span class="label">Price-to-Earnings (P/E)</span>
-                            <small class="label-desc">Stock price relative to profit</small>
-                        </div>
-                        <span class="mini-score"><span id="peScore">0</span>/20</span>
-                    </div>
-                    <div class="factor-row">
-                        <div class="label-group">
-                            <span class="label">Return on Equity (ROE)</span>
-                            <small class="label-desc">Management efficiency & compounding</small>
-                        </div>
-                        <span class="mini-score"><span id="roeScore">0</span>/20</span>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.9rem; color: #aaa; margin-bottom: 8px; font-weight: 600;">Long-Term Future Outlook</div>
+                        <div id="recommendationBadge" class="badge">--</div>
                     </div>
                 </div>
+                <div class="total-score-display">
+                    Fundamental Health: <span id="totalScore">0</span>/100
+                </div>
+                <p id="ratingReason" class="rating-reason">--</p>
+            </div>
 
-                <h3 style="margin-top: 25px;"><i class="icon">🏢</i> Company Statistics</h3>
-                <div class="factors-compact-grid">
-                    <div class="factor-row">
-                        <div class="label-group">
-                            <span class="label">Market Capitalization (Cr)</span>
-                            <small class="label-desc">Total market value of the company</small>
+            <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr;">
+                <!-- LEFT: FUNDAMENTALS -->
+                <section class="analysis-section">
+                    <h3><i class="icon">📊</i> Scoring Metrics</h3>
+                    <div class="factors-compact-grid">
+                        <div class="factor-row">
+                            <div class="label-group">
+                                <span class="label">Sales Revenue Growth</span>
+                                <small class="label-desc">Growth in total business sales</small>
+                            </div>
+                            <span class="mini-score"><span id="revScore">0</span>/20</span>
                         </div>
-                        <span class="value" id="marketCap">--</span>
-                    </div>
-                    <div class="factor-row">
-                        <div class="label-group">
-                            <span class="label">Dividend Yield (%)</span>
-                            <small class="label-desc">Annual cash payout to shareholders</small>
+                        <div class="factor-row">
+                            <div class="label-group">
+                                <span class="label">Net Profit Growth</span>
+                                <small class="label-desc">Growth in bottom-line earnings</small>
+                            </div>
+                            <span class="mini-score"><span id="profitScore">0</span>/20</span>
                         </div>
-                        <span class="value" id="divYield">--</span>
-                    </div>
-                    <div class="factor-row">
-                        <div class="label-group">
-                            <span class="label">Book Value per Share</span>
-                            <small class="label-desc">Net asset value per single share</small>
+                        <div class="factor-row">
+                            <div class="label-group">
+                                <span class="label">Debt-to-Equity Ratio</span>
+                                <small class="label-desc">Company financial leverage/risk</small>
+                            </div>
+                            <span class="mini-score"><span id="debtScore">0</span>/20</span>
                         </div>
-                        <span class="value" id="bookValue">--</span>
-                    </div>
-                    <div class="factor-row">
-                        <div class="label-group">
-                            <span class="label">Face Value</span>
-                            <small class="label-desc">Original value of one share</small>
+                        <div class="factor-row">
+                            <div class="label-group">
+                                <span class="label">Price-to-Earnings (P/E)</span>
+                                <small class="label-desc">Stock price relative to profit</small>
+                            </div>
+                            <span class="mini-score"><span id="peScore">0</span>/20</span>
                         </div>
-                        <span class="value" id="faceValue">--</span>
-                    </div>
-                    <div class="factor-row">
-                        <div class="label-group">
-                            <span class="label">SIP Suitability</span>
-                            <small class="label-desc">Score for long-term monthly investing</small>
+                        <div class="factor-row">
+                            <div class="label-group">
+                                <span class="label">Return on Equity (ROE)</span>
+                                <small class="label-desc">Management efficiency & compounding</small>
+                            </div>
+                            <span class="mini-score"><span id="roeScore">0</span>/20</span>
                         </div>
-                        <span class="value" id="sipSuitability" style="color: var(--green);">--</span>
                     </div>
-                    <div id="sipExplanationContainer" style="display:none; margin-top: 10px; padding: 12px; background: rgba(0,200,83,0.05); border-left: 3px solid var(--green); border-radius: 4px;">
-                        <p id="sipExplanation" style="margin:0; font-size: 0.85rem; color: #ccc; line-height: 1.4;"></p>
-                    </div>
-                </div>
-            </section>
+                </section>
 
-            <!-- RIGHT: TRADING -->
-            <section class="analysis-section">
-                <h3><i class="icon">📈</i> Trading Signals</h3>
-                <div class="timeframe-tabs">
-                    <button class="tab-btn active" onclick="switchTimeframe('Daily')">Daily</button>
-                    <button class="tab-btn" onclick="switchTimeframe('Weekly')">Weekly</button>
-                    <button class="tab-btn" onclick="switchTimeframe('Monthly')">Monthly</button>
-                    <button class="tab-btn" onclick="switchTimeframe('Yearly')">Yearly</button>
-                </div>
-                <div class="signal-card">
-                    <div id="signalBadge" class="badge small">HOLD</div>
-                    <div class="confidence-points">Confidence: <span id="signalPoints">0</span> / 10</div>
-                    <p id="signalDescription">Analyzing market trends...</p>
-                </div>
-
-                <!-- Technical Analysis Summary Widget -->
-                <div class="tradingview-widget-container" style="margin-top: 20px;">
-                    <div class="tradingview-widget-container__widget"></div>
-                    <div id="tradingview_ta_widget"></div>
-                </div>
-            </section>
+                <!-- RIGHT: STATS -->
+                <section class="analysis-section">
+                    <h3><i class="icon">🏢</i> Company Statistics</h3>
+                    <div class="factors-compact-grid">
+                        <div class="factor-row">
+                            <div class="label-group">
+                                <span class="label">Market Capitalization (Cr)</span>
+                                <small class="label-desc">Total market value of the company</small>
+                            </div>
+                            <span class="value" id="marketCap">--</span>
+                        </div>
+                        <div class="factor-row">
+                            <div class="label-group">
+                                <span class="label">Dividend Yield (%)</span>
+                                <small class="label-desc">Annual cash payout to shareholders</small>
+                            </div>
+                            <span class="value" id="divYield">--</span>
+                        </div>
+                        <div class="factor-row">
+                            <div class="label-group">
+                                <span class="label">Book Value per Share</span>
+                                <small class="label-desc">Net asset value per single share</small>
+                            </div>
+                            <span class="value" id="bookValue">--</span>
+                        </div>
+                        <div class="factor-row">
+                            <div class="label-group">
+                                <span class="label">Face Value</span>
+                                <small class="label-desc">Original value of one share</small>
+                            </div>
+                            <span class="value" id="faceValue">--</span>
+                        </div>
+                        <div class="factor-row">
+                            <div class="label-group">
+                                <span class="label">SIP Suitability</span>
+                                <small class="label-desc">Score for long-term monthly investing</small>
+                            </div>
+                            <span class="value" id="sipSuitability" style="color: var(--green);">--</span>
+                        </div>
+                        <div id="sipExplanationContainer" style="display:none; margin-top: 10px; padding: 12px; background: rgba(0,200,83,0.05); border-left: 3px solid var(--green); border-radius: 4px;">
+                            <p id="sipExplanation" style="margin:0; font-size: 0.85rem; color: #ccc; line-height: 1.4;"></p>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
 
-        <!-- BOTTOM: CHART -->
-        <div class="chart-container full-width">
-            <h3>Interactive Technical Chart</h3>
-            <div id="tradingview_widget"></div>
+        <!-- ==================== TECHNICAL VIEW ==================== -->
+        <div id="technicalView" style="display: none; animation: fadeIn 0.3s ease;">
+            
+            <div class="hero-result" style="background: linear-gradient(135deg, #1a1a2e 0%, #151525 100%);">
+                <!-- Timeframe Selector -->
+                <div class="timeframe-selector" style="display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 20px; width: fit-content; margin-left: auto; margin-right: auto; border: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap;">
+                    <button id="tf-1d" class="tf-btn active" onclick="changeTimeframe('1d')" style="padding: 6px 16px; border-radius: 15px; border: none; background: var(--accent); color: white; cursor: pointer; font-weight: bold; transition: 0.3s;">1D</button>
+                    <button id="tf-4h" class="tf-btn" onclick="changeTimeframe('4h')" style="padding: 6px 16px; border-radius: 15px; border: none; background: transparent; color: #aaa; cursor: pointer; font-weight: bold; transition: 0.3s;">4H</button>
+                    <button id="tf-1h" class="tf-btn" onclick="changeTimeframe('1h')" style="padding: 6px 16px; border-radius: 15px; border: none; background: transparent; color: #aaa; cursor: pointer; font-weight: bold; transition: 0.3s;">1H</button>
+                    <button id="tf-30m" class="tf-btn" onclick="changeTimeframe('30m')" style="padding: 6px 16px; border-radius: 15px; border: none; background: transparent; color: #aaa; cursor: pointer; font-weight: bold; transition: 0.3s;">30m</button>
+                    <button id="tf-15m" class="tf-btn" onclick="changeTimeframe('15m')" style="padding: 6px 16px; border-radius: 15px; border: none; background: transparent; color: #aaa; cursor: pointer; font-weight: bold; transition: 0.3s;">15m</button>
+                    <button id="tf-5m" class="tf-btn" onclick="changeTimeframe('5m')" style="padding: 6px 16px; border-radius: 15px; border: none; background: transparent; color: #aaa; cursor: pointer; font-weight: bold; transition: 0.3s;">5m</button>
+                </div>
+
+                <div class="hero-header" style="margin-bottom: 0;">
+                    <h2 style="font-size: 1.5rem; margin: 0; color: white; text-align: center;">Trading Strategy Signal</h2>
+                </div>
+                <div id="signalExplanationContainer" style="display:block; margin-top: 15px; padding: 15px; background: rgba(0, 150, 255, 0.1); border-left: 4px solid #0096FF; border-radius: 6px;">
+                    <p id="strategySignalText" style="margin:0; font-size: 1.1rem; color: #fff; line-height: 1.5; font-weight: bold; text-align: center;">Analyzing data...</p>
+                </div>
+
+                <!-- TRADE SETUP PANEL -->
+                <div id="tradeSetupPanel" style="display:none; margin-top: 20px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 15px;">
+                    <h3 style="margin-top: 0; font-size: 1rem; color: #aaa; text-align: center;"><i class="icon">🎯</i> Active Trade Setup</h3>
+                    <div style="display: flex; justify-content: space-around; text-align: center; margin-top: 15px; flex-wrap: wrap; gap: 15px;">
+                        <div><small style="color: #888;">Entry Level</small><br><strong id="setupEntry" style="font-size: 1.3rem; color: #fff;">--</strong></div>
+                        <div><small style="color: #888;">Target Level</small><br><strong id="setupTarget" style="font-size: 1.3rem; color: var(--green);">--</strong></div>
+                        <div><small style="color: #888;">Stop Loss</small><br><strong id="setupStopLoss" style="font-size: 1.3rem; color: var(--red);">--</strong></div>
+                        <div style="display:flex; align-items:center; gap:8px; justify-content:center;">
+                            <div><small style="color: #888;">Trade Status</small><br><strong id="tradeOutcome" style="font-size: 1.3rem; color: #fff;">PENDING</strong></div>
+                            <div>
+                                <button id="acceptTradeBtn" style="display:none; margin-left:8px; padding:6px 10px; border-radius:6px; background:var(--accent); color:#fff; border:none; cursor:pointer;">Accept Trade</button>
+                                <small id="acceptedNote" style="display:none; color:#9fdf9f; margin-left:8px;">Trade accepted — locked</small>
+                                <small id="tradeResolution" style="display:none; color:#9fe; margin-left:8px;"></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid" style="grid-template-columns: 1fr;">
+                <!-- RSI + MACD STRATEGY -->
+                <section class="analysis-section">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 15px;">
+                        <h3 style="margin: 0; border: none; padding: 0;"><i class="icon">⚡</i> RSI &amp; MACD Indicator Values</h3>
+                        <p style="color: #999; font-size: 0.9rem; margin: 0;">Real-time indicators on Daily (1D) chart.</p>
+                    </div>
+
+                    <!-- Indicator explanation cards (now 4 columns) -->
+                    <div class="indicator-explain-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                        <!-- RSI -->
+                        <div class="indicator-card">
+                            <div class="indicator-header">
+                                <span class="label">RSI (14)</span>
+                                <span class="value" id="rsiValue" style="font-weight:bold; font-size:1.1rem;">--</span>
+                            </div>
+                            <div id="rsiMeaning" class="indicator-meaning">--</div>
+                        </div>
+
+                        <!-- MACD Line -->
+                        <div class="indicator-card">
+                            <div class="indicator-header">
+                                <span class="label">MACD Line</span>
+                                <span class="value" id="macdLine" style="font-weight:bold; font-size:1.1rem;">--</span>
+                            </div>
+                            <div id="macdLineMeaning" class="indicator-meaning">--</div>
+                        </div>
+
+                        <!-- MACD Signal -->
+                        <div class="indicator-card">
+                            <div class="indicator-header">
+                                <span class="label">MACD Signal</span>
+                                <span class="value" id="macdSignal" style="font-weight:bold; font-size:1.1rem;">--</span>
+                            </div>
+                            <div id="macdSignalMeaning" class="indicator-meaning">--</div>
+                        </div>
+
+                        <!-- Histogram -->
+                        <div class="indicator-card">
+                            <div class="indicator-header">
+                                <span class="label">Histogram</span>
+                                <span class="value" id="macdHist" style="font-weight:bold; font-size:1.1rem;">--</span>
+                            </div>
+                            <div id="macdHistMeaning" class="indicator-meaning">--</div>
+                        </div>
+                    </div>
+
+                    <details style="margin-top: 20px; background: rgba(0,0,0,0.2); border-radius: 8px; padding: 10px;">
+                        <summary style="cursor: pointer; color: #fff; font-weight: bold; outline: none;">📖 How this strategy works</summary>
+                        <div style="margin-top: 15px; font-size: 0.9rem; color: #ccc; line-height: 1.6; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <p><strong style="color: var(--green);">🟢 When to BUY:</strong></p>
+                                <ul style="margin-top: 5px; padding-left: 20px;">
+                                    <li><strong>RSI < 45:</strong> Stock is "cheap"</li>
+                                    <li><strong>MACD > Signal:</strong> Bullish crossover</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <p><strong style="color: var(--red);">🔴 When to SELL:</strong></p>
+                                <ul style="margin-top: 5px; padding-left: 20px;">
+                                    <li><strong>RSI > 60:</strong> Stock is "expensive"</li>
+                                    <li><strong>MACD < Signal:</strong> Bearish crossover</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </details>
+                </section>
+            </div>
+
+
         </div>
     </main>
-
-    <!-- TradingView Widget Script -->
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    
+    <!-- TradingView chart is loaded dynamically by script.js -->
 
     <script src="script.js"></script>
     <script>
-        // Run this when recommendation.html loads
         window.onload = () => {
             loadStockDetails();
         };
