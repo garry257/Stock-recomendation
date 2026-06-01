@@ -281,16 +281,17 @@ function updateUI(ticker, data) {
     const acceptedNote = document.getElementById("acceptedNote");
     const resolutionEl = document.getElementById("tradeResolution");
 
+    const tradeKey = `acceptedTrade_${resolvedSymbol}_${currentTimeframe}`;
     function getAcceptedTrade() {
-        try { return JSON.parse(localStorage.getItem('acceptedTrade')); } catch (e) { return null; }
+        try { return JSON.parse(localStorage.getItem(tradeKey)); } catch (e) { return null; }
     }
-    function setAcceptedTrade(obj) { localStorage.setItem('acceptedTrade', JSON.stringify(obj)); }
-    function clearAcceptedTrade() { localStorage.removeItem('acceptedTrade'); }
+    function setAcceptedTrade(obj) { localStorage.setItem(tradeKey, JSON.stringify(obj)); }
+    function clearAcceptedTrade() { localStorage.removeItem(tradeKey); }
 
     const acceptedTrade = getAcceptedTrade();
 
     // If user previously accepted this trade, keep it locked until win/loss
-    if (acceptedTrade && acceptedTrade.ticker === resolvedSymbol) {
+    if (acceptedTrade && acceptedTrade.ticker === resolvedSymbol && acceptedTrade.timeframe === currentTimeframe) {
         setTxt("setupEntry", acceptedTrade.entry);
         setTxt("setupTarget", acceptedTrade.target);
         setTxt("setupStopLoss", acceptedTrade.stopLoss);
@@ -343,6 +344,7 @@ function updateUI(ticker, data) {
             acceptBtn.onclick = () => {
                 const toAccept = {
                     ticker: resolvedSymbol,
+                    timeframe: currentTimeframe,
                     entry: data.tradeSetup.entry,
                     target: data.tradeSetup.target,
                     stopLoss: data.tradeSetup.stopLoss,
