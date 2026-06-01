@@ -1,11 +1,11 @@
+
 // Imports and setup
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const dns = require('dns');
 
-// Force Google DNS for MongoDB SRV resolution
-dns.setServers(['8.8.8.8', '8.8.4.4']);
+// Removed custom DNS setting as it can interfere with cloud providers like Render
 
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 
@@ -17,6 +17,7 @@ app.use(express.static(path.join(__dirname, '../')));
 // DATABASE CONNECTION
 const mongoose = require('mongoose');
 
+console.log(process.env.MONGO_URL);
 mongoose.connect(process.env.MONGO_URL, {
     serverSelectionTimeoutMS: 5000 // Timeout after 5s
 })
